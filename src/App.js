@@ -24,7 +24,7 @@ const App = () => {
   const [selectedValues, setSelectedValues] = useState([]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  // const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [activeTag, setActiveTag] = useState(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -133,10 +133,10 @@ const App = () => {
       // You might need to adjust '5' based on the exact visual offset you want
       const positionBelowIcon = rect.bottom + 5;
 
-      setModalPosition({
-        x: rect.left + window.scrollX, // Horizontal alignment
-        y: positionBelowIcon + window.scrollY, // Vertical alignment just below the icon
-      });
+      // setModalPosition({
+      //   x: rect.left + window.scrollX, // Horizontal alignment
+      //   y: positionBelowIcon + window.scrollY, // Vertical alignment just below the icon
+      // });
 
       // Show the modal
       setIsModalVisible(true);
