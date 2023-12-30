@@ -128,10 +128,10 @@ const App = () => {
     setActiveTag(value);
 
     if (event.currentTarget) {
-      const rect = event.currentTarget.getBoundingClientRect();
+      // const rect = event.currentTarget.getBoundingClientRect();
       // Calculate the position just below the three-dot icon
       // You might need to adjust '5' based on the exact visual offset you want
-      const positionBelowIcon = rect.bottom + 5;
+      // const positionBelowIcon = rect.bottom + 5;
 
       // setModalPosition({
       //   x: rect.left + window.scrollX, // Horizontal alignment
