@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   updateTagDetails,
   updateTagColor,
-  updateTagText,
+  // updateTagText,
   deleteTag,
 } from "./actions";
 import "./App.css";
