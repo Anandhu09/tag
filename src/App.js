@@ -341,10 +341,6 @@ const App = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(inputTag);
-  }, [inputTag]);
-
   const dropdownRender = (menu) => {
     // Filter options based on the input
     const filteredOptions = options.filter((option) =>
