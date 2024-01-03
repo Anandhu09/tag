@@ -58,19 +58,18 @@ const App = () => {
 
   const updateTag = () => {
     const trimmedInput = inputValue.trim();
-   
-  
+
     if (trimmedInput && trimmedInput !== activeTag) {
       const newSelectedValues = selectedValues.includes(activeTag)
         ? selectedValues.map((value) =>
             value === activeTag ? trimmedInput : value
           )
         : selectedValues;
-  
+
       const indexToUpdate = options.findIndex(
         (option) => option.value === activeTag
       );
-  
+
       if (indexToUpdate > -1) {
         // Update options array with the new tag
         const newOptions = [
@@ -78,41 +77,44 @@ const App = () => {
           { value: trimmedInput, label: trimmedInput },
           ...options.slice(indexToUpdate + 1),
         ];
-  
+
         // Update the tag color map with the new tag name
         const newTagColorMap = {
           ...tagColorMap,
-          [trimmedInput]: tagColorMap[activeTag] || tagColors[Object.keys(tagColorMap).length % tagColors.length],
+          [trimmedInput]:
+            tagColorMap[activeTag] ||
+            tagColors[Object.keys(tagColorMap).length % tagColors.length],
         };
         delete newTagColorMap[activeTag];
-  
+
         // Create the updatedTagDetails array for the payload
         const updatedTagDetails = newSelectedValues.map((tag) => ({
           text: tag,
           color: newTagColorMap[tag],
         }));
-  
+
         // Dispatch the update to the Redux store
         dispatch(updateTagDetails({ id: 2974, tags: updatedTagDetails }));
-  
+
         // Update the local component state
         setTagColorMap(newTagColorMap);
         setOptions(newOptions);
         setSelectedValues(newSelectedValues);
-  
+
         // Reset the active tag
         setActiveTag(null);
         setIsModalVisible(false);
       }
     }
   };
-  
 
   const handleInputKeyPress = (e) => {
     const trimmedInput = inputValue.trim();
     if (e.key === "Enter") {
-      const isDuplicate = options.some((option) => option.value === trimmedInput);
-  
+      const isDuplicate = options.some(
+        (option) => option.value === trimmedInput
+      );
+
       if (isDuplicate) {
         notification.warning({
           message: "Duplicate Tag",
@@ -126,12 +128,10 @@ const App = () => {
   };
 
   const handleModalClose = () => {
-    updateTag(); // Save the tag if needed
+    updateTag();
     setActiveTag(null);
     setIsModalVisible(false);
   };
-  
-  
 
   const handleEditClick = (event, value) => {
     event.stopPropagation();
@@ -139,16 +139,6 @@ const App = () => {
     // Set active tag
     setActiveTag(value);
 
-    if (event.currentTarget) {
-      // const rect = event.currentTarget.getBoundingClientRect();
-      // Calculate the position just below the three-dot icon
-      // You might need to adjust '5' based on the exact visual offset you want
-      // const positionBelowIcon = rect.bottom + 5;
-      // setModalPosition({
-      //   x: rect.left + window.scrollX, // Horizontal alignment
-      //   y: positionBelowIcon + window.scrollY, // Vertical alignment just below the icon
-      // });
-    }
     // Show the modal
     setIsModalVisible(true);
   };
@@ -479,9 +469,9 @@ const App = () => {
         placeholder="Tags Mode"
         value={selectedValues}
         onSearch={setInputTag}
-        searchValue={inputTag} 
+        searchValue={inputTag}
         onChange={(value) => handleChange(value, 2974)}
-        onBlur={() => setInputTag("")} 
+        onBlur={() => setInputTag("")}
         tagRender={CustomTag}
         dropdownRender={dropdownRender}
         dropdownStyle={{ zIndex: 500 }}
