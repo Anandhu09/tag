@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Input, Button, Select, Menu, Tag, Modal, notification } from "antd";
+import {
+  Input,
+  Button,
+  Select,
+  Menu,
+  Tag,
+  Modal,
+  notification,
+  Empty,
+} from "antd";
 import {
   MoreOutlined,
   DeleteOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
-import { useDispatch, 
-  // useSelector
- } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   updateTagDetails,
   updateTagColor,
@@ -17,7 +24,7 @@ import {
 import "./App.css";
 
 const App = () => {
-  // const tagDetails = useSelector((state) => state.tagsReducer.tagDetails);
+  const tagDetails = useSelector((state) => state.tagsReducer.tagDetails);
   const dispatch = useDispatch();
   const [options, setOptions] = useState([]);
   const [tagColorMap, setTagColorMap] = useState({});
@@ -27,10 +34,9 @@ const App = () => {
   // const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [activeTag, setActiveTag] = useState(null);
   const [inputValue, setInputValue] = useState("");
-
+  const [inputTag, setInputTag] = useState("");
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const [tagToDelete, setTagToDelete] = useState(null);
-
 
   const tagColors = [
     "magenta",
@@ -48,9 +54,8 @@ const App = () => {
     }
   }, [activeTag]);
 
-
   const handleInputChange = (e) => {
-    setInputValue(e.target.value); 
+    setInputValue(e.target.value);
   };
 
   const handleInputKeyPress = (e) => {
@@ -63,11 +68,11 @@ const App = () => {
 
       if (isDuplicate) {
         notification.warning({
-          message: 'Duplicate Tag',
-          description: 'This tag already exists.',
-          duration: 3 
+          message: "Duplicate Tag",
+          description: "This tag already exists.",
+          duration: 3,
         });
-        return; 
+        return;
       }
 
       // Check if the input is not empty and not the same as the old tag
@@ -105,7 +110,7 @@ const App = () => {
 
           // Dispatch the updates to the Redux store
           // Assuming the tag's ID is needed to correctly identify which tag to update
-          const tagId = 2974; 
+          const tagId = 2974;
           dispatch(updateTagText(tagId, activeTag, trimmedInput));
 
           // Update the local component state
@@ -121,9 +126,8 @@ const App = () => {
   };
 
   const handleEditClick = (event, value) => {
-
     event.stopPropagation();
-    
+
     // Set active tag
     setActiveTag(value);
 
@@ -132,15 +136,13 @@ const App = () => {
       // Calculate the position just below the three-dot icon
       // You might need to adjust '5' based on the exact visual offset you want
       // const positionBelowIcon = rect.bottom + 5;
-
       // setModalPosition({
       //   x: rect.left + window.scrollX, // Horizontal alignment
       //   y: positionBelowIcon + window.scrollY, // Vertical alignment just below the icon
       // });
-
-      // Show the modal
-      setIsModalVisible(true);
     }
+    // Show the modal
+    setIsModalVisible(true);
   };
 
   const handleColorChange = (color) => {
@@ -168,7 +170,6 @@ const App = () => {
           // left: modalPosition.x,
           // position: "absolute",
           zIndex: 1000,
-          
         }}
       >
         <div
@@ -189,13 +190,15 @@ const App = () => {
           {/* Delete Tag Button */}
           <Button
             type="primary"
-            style={{ width: "100%", 
-            marginBottom: "10px",
-            cursor: 'pointer',
-            color: 'rgb(235, 87, 87)',
-            border: '1px solid rgba(235, 87, 87, 0.5)',
-            marginTop: '8px',
-            background: 'rgba(235, 87, 87, 0.1)', }}
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              cursor: "pointer",
+              color: "rgb(235, 87, 87)",
+              border: "1px solid rgba(235, 87, 87, 0.5)",
+              marginTop: "8px",
+              background: "rgba(235, 87, 87, 0.1)",
+            }}
             onClick={() => handleDeleteTag(activeTag)}
           >
             <DeleteOutlined />
@@ -276,46 +279,36 @@ const App = () => {
     return (
       <Modal
         title="Confirm Deletion"
-        visible={isDeleteConfirmVisible}
+        open={isDeleteConfirmVisible}
         onOk={confirmDelete}
         onCancel={() => setIsDeleteConfirmVisible(false)}
         footer={null} // Remove default footer
         centered
         width={300}
       >
-        <div style={{ textAlign: 'center' }}> {/* Center content */}
+        <div style={{ textAlign: "center" }}>
+          {" "}
+          {/* Center content */}
           <p>Are you sure you want to delete this option?</p>
-          <Button 
-            key="delete" 
-            onClick={confirmDelete} 
-            style={{ 
-              userSelect: 'none',
-              transition: 'background 20ms ease-in 0s',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              whiteSpace: 'nowrap',
-              borderRadius: '4px',
-              height: '32px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
-              fontSize: '14px',
-              lineHeight: '1.2',
-              color: 'rgb(235, 87, 87)',
-              border: '1px solid rgba(235, 87, 87, 0.5)',
-              width: '100%',
-              marginTop: '8px',
-              marginBottom: '18px',
-              background: 'rgba(235, 87, 87, 0.1)'
+          <Button
+            key="delete"
+            onClick={confirmDelete}
+            style={{
+              cursor: "pointer",
+              color: "rgb(235, 87, 87)",
+              border: "1px solid rgba(235, 87, 87, 0.5)",
+              width: "100%",
+              marginTop: "8px",
+              marginBottom: "18px",
+              background: "rgba(235, 87, 87, 0.1)",
             }}
           >
             Delete
           </Button>
-          <Button 
-            key="cancel" 
-            onClick={() => setIsDeleteConfirmVisible(false)} 
-            style={{ width: '100%' }} // Full width button
+          <Button
+            key="cancel"
+            onClick={() => setIsDeleteConfirmVisible(false)}
+            style={{ width: "100%" }} // Full width button
           >
             Cancel
           </Button>
@@ -323,38 +316,10 @@ const App = () => {
       </Modal>
     );
   };
-  
-  
-  
-  
 
-  // useEffect(() => {
-  //   console.log(tagDetails, "hey", options);
-  // }, [tagDetails, options]);
-
-  const handleChange = (value, id) => {
-
-    // Update the color map and tag details for selected values
-    setSelectedValues(value);
-
-    const newTagColorMap = { ...tagColorMap };
-    const updatedTagDetails = value.map((text) => {
-      if (!newTagColorMap[text]) {
-        newTagColorMap[text] =
-          tagColors[Object.keys(newTagColorMap).length % tagColors.length];
-      }
-      return { text: text, color: newTagColorMap[text] };
-    });
-
-    setTagColorMap(newTagColorMap);
-    dispatch(updateTagDetails({ id, tags: updatedTagDetails }));
-
-    // Add new options for newly added tags without removing unselected ones
-    const newOptions = [
-      ...new Set([...options.map((option) => option.value), ...value]),
-    ];
-    setOptions(newOptions.map((text) => ({ value: text, label: text })));
-  };
+  useEffect(() => {
+    console.log(tagDetails, "hey", options);
+  }, [tagDetails, options]);
 
   const CustomTag = (props) => {
     const { label, value, closable, onClose } = props;
@@ -371,37 +336,82 @@ const App = () => {
     );
   };
 
-  const dropdownRender = () => {
-    return (
-      <Menu>
-        {options.map((option) => (
-          <Menu.Item key={option.value}>
+  useEffect(() => {
+    console.log(inputTag);
+  }, [inputTag]);
+
+  const dropdownRender = (menu) => {
+    // Filter options based on the input
+    const filteredOptions = options.filter((option) =>
+      option.label.toLowerCase().includes(inputTag.toLowerCase())
+    );
+
+    // Check if the current input is part of the filtered options
+    const isInputInOptions = filteredOptions.some(
+      (option) => option.label.toLowerCase() === inputTag.toLowerCase()
+    );
+
+    // Show the user's input as a new option if it's not in the options
+    const inputOption =
+      inputTag && !isInputInOptions
+        ? [
+            <Menu.Item key="inputTag">
+              <CustomTag label={inputTag} value={inputTag} />
+            </Menu.Item>,
+          ]
+        : [];
+
+    // If there are no options and no input, show the "Empty" state
+    if (filteredOptions.length === 0 && !inputTag) {
+      return <Empty />;
+    }
+
+    // Combine the input option with filtered options
+    const menuItems = inputOption.concat(
+      filteredOptions.map((option) => (
+        <Menu.Item key={option.value}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+            onClick={() => toggleTagSelection(option.value)}
+          >
+            <div style={{ flex: 1, marginRight: "10px" }}>
+              <CustomTag label={option.label} value={option.value} />
+            </div>
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
+              className="icon-hover-box"
+              onClick={(event) => {
+                event.stopPropagation();
+                handleEditClick(event, option.value);
               }}
-              onClick={() => toggleTagSelection(option.value)}
             >
-              <div style={{ flex: 1, marginRight: "10px" }}>
-                <CustomTag label={option.label} value={option.value} />
-              </div>
               <MoreOutlined
                 style={{
                   cursor: "pointer",
                   flexShrink: 0,
                   transform: "rotate(90deg)",
-                }}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleEditClick(event, option.value);
+                  width: "auto",
+                  height: "auto",
                 }}
               />
             </div>
-          </Menu.Item>
-        ))}
+          </div>
+        </Menu.Item>
+      ))
+    );
+
+    return (
+      <Menu
+        style={{
+          maxHeight: "300px",
+          overflowY: "auto",
+        }}
+      >
+        {menuItems}
       </Menu>
     );
   };
@@ -414,21 +424,70 @@ const App = () => {
       // Add the tag to selected values
       setSelectedValues([...selectedValues, value]);
     }
+    setInputTag("");
   };
-  
+
+  const updateTagInformation = (newTags) => {
+    const newTagColorMap = { ...tagColorMap };
+    const updatedTagDetails = [];
+
+    newTags.forEach((tag) => {
+      if (!newTagColorMap[tag]) {
+        newTagColorMap[tag] =
+          tagColors[Object.keys(newTagColorMap).length % tagColors.length];
+      }
+      updatedTagDetails.push({ text: tag, color: newTagColorMap[tag] });
+    });
+
+    setTagColorMap(newTagColorMap);
+    dispatch(updateTagDetails({ id: 2974, tags: updatedTagDetails }));
+
+    // Update options
+    const newOptions = [
+      ...new Set([...options.map((option) => option.value), ...newTags]),
+    ].map((text) => ({ value: text, label: text }));
+    setOptions(newOptions);
+  };
+
+  const handleChange = (value, id) => {
+    // Update the color map and tag details for selected values
+    setSelectedValues(value);
+    updateTagInformation(value);
+  };
+
+  const handleEnterKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const newTag = inputTag.trim();
+
+      if (newTag && !options.some((option) => option.value === newTag)) {
+        const newSelectedValues = [...selectedValues, newTag];
+        setSelectedValues(newSelectedValues);
+        updateTagInformation(newSelectedValues);
+      }
+
+      setInputTag("");
+    }
+  };
+
   return (
     <div className="App">
       <Select
         mode="tags"
         style={{ width: "340px" }}
         placeholder="Tags Mode"
-        onChange={(value) => handleChange(value, 2974)}
-        options={options}
         value={selectedValues}
+        onSearch={setInputTag}
+        searchValue={inputTag} 
+        onChange={(value) => handleChange(value, 2974)}
+        onBlur={() => setInputTag("")} 
         tagRender={CustomTag}
         dropdownRender={dropdownRender}
         dropdownStyle={{ zIndex: 500 }}
+        showSearch
+        onInputKeyDown={handleEnterKeyPress}
       />
+
       {renderColorModal()}
       {renderDeleteConfirmationModal()}
     </div>
