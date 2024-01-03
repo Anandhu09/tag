@@ -29,9 +29,7 @@ const App = () => {
   const [options, setOptions] = useState([]);
   const [tagColorMap, setTagColorMap] = useState({});
   const [selectedValues, setSelectedValues] = useState([]);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [activeTag, setActiveTag] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [inputTag, setInputTag] = useState("");
@@ -58,14 +56,63 @@ const App = () => {
     setInputValue(e.target.value);
   };
 
-  const handleInputKeyPress = (e) => {
-    if (e.key === "Enter") {
-      const trimmedInput = inputValue.trim();
-
-      const isDuplicate = options.some(
-        (option) => option.value === trimmedInput
+  const updateTag = () => {
+    const trimmedInput = inputValue.trim();
+   
+  
+    if (trimmedInput && trimmedInput !== activeTag) {
+      const newSelectedValues = selectedValues.includes(activeTag)
+        ? selectedValues.map((value) =>
+            value === activeTag ? trimmedInput : value
+          )
+        : selectedValues;
+  
+      const indexToUpdate = options.findIndex(
+        (option) => option.value === activeTag
       );
+  
+      if (indexToUpdate > -1) {
+        // Update options array with the new tag
+        const newOptions = [
+          ...options.slice(0, indexToUpdate),
+          { value: trimmedInput, label: trimmedInput },
+          ...options.slice(indexToUpdate + 1),
+        ];
+  
+        // Update the tag color map with the new tag name
+        const newTagColorMap = {
+          ...tagColorMap,
+          [trimmedInput]: tagColorMap[activeTag] || tagColors[Object.keys(tagColorMap).length % tagColors.length],
+        };
+        delete newTagColorMap[activeTag];
+  
+        // Create the updatedTagDetails array for the payload
+        const updatedTagDetails = newSelectedValues.map((tag) => ({
+          text: tag,
+          color: newTagColorMap[tag],
+        }));
+  
+        // Dispatch the update to the Redux store
+        dispatch(updateTagDetails({ id: 2974, tags: updatedTagDetails }));
+  
+        // Update the local component state
+        setTagColorMap(newTagColorMap);
+        setOptions(newOptions);
+        setSelectedValues(newSelectedValues);
+  
+        // Reset the active tag
+        setActiveTag(null);
+        setIsModalVisible(false);
+      }
+    }
+  };
+  
 
+  const handleInputKeyPress = (e) => {
+    const trimmedInput = inputValue.trim();
+    if (e.key === "Enter") {
+      const isDuplicate = options.some((option) => option.value === trimmedInput);
+  
       if (isDuplicate) {
         notification.warning({
           message: "Duplicate Tag",
@@ -74,56 +121,17 @@ const App = () => {
         });
         return;
       }
-
-      // Check if the input is not empty and not the same as the old tag
-      if (trimmedInput && trimmedInput !== activeTag) {
-        // Update selectedValues if activeTag was selected
-        const newSelectedValues = selectedValues.includes(activeTag)
-          ? selectedValues.map((value) =>
-              value === activeTag ? trimmedInput : value
-            )
-          : selectedValues;
-        setSelectedValues(newSelectedValues);
-      }
-
-      // Check if the input is not empty and not the same as the old tag
-      if (trimmedInput && trimmedInput !== activeTag) {
-        // Find the index of the option that corresponds to the activeTag
-        const indexToUpdate = options.findIndex(
-          (option) => option.value === activeTag
-        );
-
-        if (indexToUpdate > -1) {
-          // Immutably update the options array
-          const newOptions = [
-            ...options.slice(0, indexToUpdate),
-            { value: trimmedInput, label: trimmedInput },
-            ...options.slice(indexToUpdate + 1),
-          ];
-
-          // Update the tag color map with the new tag name
-          const newTagColorMap = {
-            ...tagColorMap,
-            [trimmedInput]: tagColorMap[activeTag],
-          };
-          delete newTagColorMap[activeTag];
-
-          // Dispatch the updates to the Redux store
-          // Assuming the tag's ID is needed to correctly identify which tag to update
-          const tagId = 2974;
-          dispatch(updateTagText(tagId, activeTag, trimmedInput));
-
-          // Update the local component state
-          setTagColorMap(newTagColorMap);
-          setOptions(newOptions);
-
-          // Reset the active tag and close the modal
-          setActiveTag(null);
-          setIsModalVisible(false);
-        }
-      }
+      updateTag();
     }
   };
+
+  const handleModalClose = () => {
+    updateTag(); // Save the tag if needed
+    setActiveTag(null);
+    setIsModalVisible(false);
+  };
+  
+  
 
   const handleEditClick = (event, value) => {
     event.stopPropagation();
@@ -161,14 +169,11 @@ const App = () => {
       <Modal
         title="Update Tag"
         open={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
+        onCancel={handleModalClose}
         footer={null}
         width={300}
         centered
         style={{
-          // top: modalPosition.y,
-          // left: modalPosition.x,
-          // position: "absolute",
           zIndex: 1000,
         }}
       >
