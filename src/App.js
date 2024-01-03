@@ -36,6 +36,7 @@ const App = () => {
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const [tagToDelete, setTagToDelete] = useState(null);
 
+  // Defined colors for tags
   const tagColors = [
     "magenta",
     "orange",
@@ -46,16 +47,19 @@ const App = () => {
     "purple",
   ];
 
+  // Effect to set the input value when active tag is set
   useEffect(() => {
     if (activeTag) {
       setInputValue(activeTag);
     }
   }, [activeTag]);
 
+  // Handle input change for tag editing
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
+  // Function to update tag details
   const updateTag = () => {
     const trimmedInput = inputValue.trim();
 
@@ -108,6 +112,7 @@ const App = () => {
     }
   };
 
+  // Handle enter key press in input field in the Update Tag Modal
   const handleInputKeyPress = (e) => {
     const trimmedInput = inputValue.trim();
     if (e.key === "Enter") {
@@ -127,12 +132,14 @@ const App = () => {
     }
   };
 
+  // Handle closing of Update tag modal
   const handleModalClose = () => {
     updateTag();
     setActiveTag(null);
     setIsModalVisible(false);
   };
 
+  // Handle clicking of Update tag option
   const handleEditClick = (event, value) => {
     event.stopPropagation();
 
@@ -143,6 +150,7 @@ const App = () => {
     setIsModalVisible(true);
   };
 
+  // Handle color change of tags
   const handleColorChange = (color) => {
     if (activeTag) {
       // Update the color map for the active tag
@@ -154,6 +162,7 @@ const App = () => {
     }
   };
 
+  // Render the modal for updating tag color
   const renderColorModal = () => {
     return (
       <Modal
@@ -236,11 +245,13 @@ const App = () => {
     );
   };
 
+  // Handle deletion of a tag
   const handleDeleteTag = (tagName) => {
     setTagToDelete(tagName);
     setIsDeleteConfirmVisible(true);
   };
 
+  // Confirm tag deletion
   const confirmDelete = () => {
     if (tagToDelete) {
       dispatch(deleteTag(2974, tagToDelete));
@@ -270,6 +281,7 @@ const App = () => {
     }
   };
 
+  // Render the modal for confirming tag deletion
   const renderDeleteConfirmationModal = () => {
     return (
       <Modal
@@ -316,6 +328,7 @@ const App = () => {
     console.log(tagDetails, "hey", options);
   }, [tagDetails, options]);
 
+  // Custom Tag component for rendering each tag
   const CustomTag = (props) => {
     const { label, value, closable, onClose } = props;
     const backgroundColor = tagColorMap[value] || "default";
@@ -331,6 +344,7 @@ const App = () => {
     );
   };
 
+  // Custom dropdown render function
   const dropdownRender = (menu) => {
     // Filter options based on the input
     const filteredOptions = options.filter((option) =>
@@ -407,6 +421,7 @@ const App = () => {
     );
   };
 
+  // Function to tag selection from dropdown to select input field
   const toggleTagSelection = (value) => {
     if (selectedValues.includes(value)) {
       // Remove the tag from selected values
@@ -418,6 +433,7 @@ const App = () => {
     setInputTag("");
   };
 
+  // Update tag information in options and redux store
   const updateTagInformation = (newTags) => {
     const newTagColorMap = { ...tagColorMap };
     const updatedTagDetails = [];
@@ -440,12 +456,14 @@ const App = () => {
     setOptions(newOptions);
   };
 
+  // Handle changes in Select component (tag addition/removal)
   const handleChange = (value, id) => {
     // Update the color map and tag details for selected values
     setSelectedValues(value);
     updateTagInformation(value);
   };
 
+  // Handle enter key press in the Select input field
   const handleEnterKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -461,8 +479,10 @@ const App = () => {
     }
   };
 
+  // Main render return of the component
   return (
     <div className="App">
+      {/* Ant Design Select component for tag selection and management */}
       <Select
         mode="tags"
         style={{ width: "340px" }}
