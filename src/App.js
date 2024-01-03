@@ -21,7 +21,9 @@ import {
   // updateTagText,
   deleteTag,
 } from "./actions";
+import CustomTag from "./CustomTag";
 import "./App.css";
+import "./App.scss";
 
 const App = () => {
   const tagDetails = useSelector((state) => state.tagsReducer.tagDetails);
@@ -329,20 +331,6 @@ const App = () => {
   }, [tagDetails, options]);
 
   // Custom Tag component for rendering each tag
-  const CustomTag = (props) => {
-    const { label, value, closable, onClose } = props;
-    const backgroundColor = tagColorMap[value] || "default";
-    return (
-      <Tag
-        color={backgroundColor}
-        closable={closable}
-        onClose={onClose}
-        style={{ marginBottom: 3 }}
-      >
-        {label}
-      </Tag>
-    );
-  };
 
   // Custom dropdown render function
   const dropdownRender = (menu) => {
@@ -361,7 +349,11 @@ const App = () => {
       inputTag && !isInputInOptions
         ? [
             <Menu.Item key="inputTag">
-              <CustomTag label={inputTag} value={inputTag} />
+              <CustomTag
+                // color={tagColorMap[inputTag]}
+                label={inputTag}
+                value={inputTag}
+              />
             </Menu.Item>,
           ]
         : [];
@@ -374,7 +366,10 @@ const App = () => {
     // Combine the input option with filtered options
     const menuItems = inputOption.concat(
       filteredOptions.map((option) => (
-        <Menu.Item key={option.value}>
+        <Menu.Item key={option.value} style={{
+              backgroundColor: selectedValues.includes(option.value) ? "#e6f4ff" : "transparent",
+              color: selectedValues.includes(option.value) ? "white" : "inherit",
+            }}>
           <div
             style={{
               display: "flex",
@@ -385,7 +380,11 @@ const App = () => {
             onClick={() => toggleTagSelection(option.value)}
           >
             <div style={{ flex: 1, marginRight: "10px" }}>
-              <CustomTag label={option.label} value={option.value} />
+              <CustomTag
+                color={tagColorMap[option.label]}
+                label={option.label}
+                value={option.value}
+              />
             </div>
             <div
               className="icon-hover-box"
@@ -401,6 +400,7 @@ const App = () => {
                   transform: "rotate(90deg)",
                   width: "auto",
                   height: "auto",
+                  color:"black"
                 }}
               />
             </div>
@@ -423,15 +423,21 @@ const App = () => {
 
   // Function to tag selection from dropdown to select input field
   const toggleTagSelection = (value) => {
-    if (selectedValues.includes(value)) {
+    // Check if the tag is already selected
+    const isTagSelected = selectedValues.includes(value);
+  
+    if (isTagSelected) {
       // Remove the tag from selected values
       setSelectedValues(selectedValues.filter((tag) => tag !== value));
     } else {
       // Add the tag to selected values
       setSelectedValues([...selectedValues, value]);
     }
+  
+    // Clear the input field
     setInputTag("");
   };
+  
 
   // Update tag information in options and redux store
   const updateTagInformation = (newTags) => {
@@ -485,6 +491,7 @@ const App = () => {
       {/* Ant Design Select component for tag selection and management */}
       <Select
         mode="tags"
+        className="custom-select-with-scroll"
         style={{ width: "340px" }}
         placeholder="Tags Mode"
         value={selectedValues}
@@ -492,7 +499,14 @@ const App = () => {
         searchValue={inputTag}
         onChange={(value) => handleChange(value, 2974)}
         onBlur={() => setInputTag("")}
-        tagRender={CustomTag}
+        tagRender={(props) => (
+          <CustomTag
+            onClose={props.onClose}
+            closable={props.closable}
+            label={props.label}
+            color={tagColorMap[props.label]}
+          />
+        )}
         dropdownRender={dropdownRender}
         dropdownStyle={{ zIndex: 500 }}
         showSearch
