@@ -22,7 +22,7 @@ import {
   deleteTag,
 } from "./actions";
 import CustomTag from "./CustomTag";
-import "./App.css";
+// import "./App.css";
 import "./App.scss";
 
 const App = () => {
@@ -366,10 +366,15 @@ const App = () => {
     // Combine the input option with filtered options
     const menuItems = inputOption.concat(
       filteredOptions.map((option) => (
-        <Menu.Item key={option.value} style={{
-              backgroundColor: selectedValues.includes(option.value) ? "#e6f4ff" : "transparent",
-              color: selectedValues.includes(option.value) ? "white" : "inherit",
-            }}>
+        <Menu.Item
+          key={option.value}
+          style={{
+            backgroundColor: selectedValues.includes(option.value)
+              ? "#e6f4ff"
+              : "transparent",
+            color: selectedValues.includes(option.value) ? "white" : "inherit",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -400,7 +405,7 @@ const App = () => {
                   transform: "rotate(90deg)",
                   width: "auto",
                   height: "auto",
-                  color:"black"
+                  color: "black",
                 }}
               />
             </div>
@@ -425,7 +430,7 @@ const App = () => {
   const toggleTagSelection = (value) => {
     // Check if the tag is already selected
     const isTagSelected = selectedValues.includes(value);
-  
+
     if (isTagSelected) {
       // Remove the tag from selected values
       setSelectedValues(selectedValues.filter((tag) => tag !== value));
@@ -433,11 +438,10 @@ const App = () => {
       // Add the tag to selected values
       setSelectedValues([...selectedValues, value]);
     }
-  
+
     // Clear the input field
     setInputTag("");
   };
-  
 
   // Update tag information in options and redux store
   const updateTagInformation = (newTags) => {
