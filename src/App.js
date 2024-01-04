@@ -174,60 +174,38 @@ const App = () => {
         footer={null}
         width={300}
         centered
-        style={{
-          zIndex: 1000,
-        }}
+        className="color-modal"
       >
-        <div
-          style={{ display: "flex", flexDirection: "column", padding: "10px" }}
-        >
+        <div className="modal-content">
           {/* Update Tag Input Field */}
           {activeTag && (
-            <div style={{ marginBottom: "10px" }}>
+            <div className="tag-input-field">
               <Input
                 value={inputValue}
                 onChange={handleInputChange}
                 onPressEnter={handleInputKeyPress}
-                style={{ width: "100%" }}
               />
             </div>
           )}
-
+  
           {/* Delete Tag Button */}
           <Button
             type="primary"
-            style={{
-              width: "100%",
-              marginBottom: "10px",
-              cursor: "pointer",
-              color: "rgb(235, 87, 87)",
-              border: "1px solid rgba(235, 87, 87, 0.5)",
-              marginTop: "8px",
-              background: "rgba(235, 87, 87, 0.1)",
-            }}
+            className="delete-tag-button"
             onClick={() => handleDeleteTag(activeTag)}
           >
             <DeleteOutlined />
             Delete Tag
           </Button>
-
+  
           {/* Colors Heading */}
-          <div style={{ fontWeight: "bold", marginBottom: "10px" }}>Colors</div>
-
+          <div className="colors-heading">Colors</div>
+  
           {/* Colors List */}
           {tagColors.map((color) => (
             <div
               key={color}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "5px",
-                padding: "5px",
-                backgroundColor:
-                  tagColorMap[activeTag] === color ? "#f0f0f0" : "transparent",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+              className={`color-item ${tagColorMap[activeTag] === color ? 'active' : ''}`}
               onClick={() => handleColorChange(color)}
             >
               <Tag
@@ -246,6 +224,7 @@ const App = () => {
       </Modal>
     );
   };
+  
 
   // Handle deletion of a tag
   const handleDeleteTag = (tagName) => {
@@ -291,33 +270,24 @@ const App = () => {
         open={isDeleteConfirmVisible}
         onOk={confirmDelete}
         onCancel={() => setIsDeleteConfirmVisible(false)}
-        footer={null} // Remove default footer
+        footer={null}
         centered
         width={300}
+        className="delete-confirmation-modal"
       >
-        <div style={{ textAlign: "center" }}>
-          {" "}
-          {/* Center content */}
+        <div className="modal-body">
           <p>Are you sure you want to delete this option?</p>
           <Button
             key="delete"
             onClick={confirmDelete}
-            style={{
-              cursor: "pointer",
-              color: "rgb(235, 87, 87)",
-              border: "1px solid rgba(235, 87, 87, 0.5)",
-              width: "100%",
-              marginTop: "8px",
-              marginBottom: "18px",
-              background: "rgba(235, 87, 87, 0.1)",
-            }}
+            className="delete-button"
           >
             Delete
           </Button>
           <Button
             key="cancel"
             onClick={() => setIsDeleteConfirmVisible(false)}
-            style={{ width: "100%" }} // Full width button
+            className="cancel-button"
           >
             Cancel
           </Button>
@@ -325,6 +295,7 @@ const App = () => {
       </Modal>
     );
   };
+  
 
   useEffect(() => {
     console.log(tagDetails, "hey", options);
@@ -367,24 +338,11 @@ const App = () => {
     const menuItems = inputOption.concat(
       filteredOptions.map((option) => (
         <Menu.Item
-          key={option.value}
-          style={{
-            backgroundColor: selectedValues.includes(option.value)
-              ? "#e6f4ff"
-              : "transparent",
-            color: selectedValues.includes(option.value) ? "white" : "inherit",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-            onClick={() => toggleTagSelection(option.value)}
-          >
-            <div style={{ flex: 1, marginRight: "10px" }}>
+        key={option.value}
+        className={`menu-item ${selectedValues.includes(option.value) ? "selected" : ""}`}
+      >
+          <div className="menu-item-content" onClick={() => toggleTagSelection(option.value)}>
+            <div className="custom-tag-container">
               <CustomTag
                 color={tagColorMap[option.label]}
                 label={option.label}
@@ -398,16 +356,7 @@ const App = () => {
                 handleEditClick(event, option.value);
               }}
             >
-              <MoreOutlined
-                style={{
-                  cursor: "pointer",
-                  flexShrink: 0,
-                  transform: "rotate(90deg)",
-                  width: "auto",
-                  height: "auto",
-                  color: "black",
-                }}
-              />
+              <MoreOutlined className="more-icon" />
             </div>
           </div>
         </Menu.Item>
@@ -415,12 +364,7 @@ const App = () => {
     );
 
     return (
-      <Menu
-        style={{
-          maxHeight: "300px",
-          overflowY: "auto",
-        }}
-      >
+      <Menu className="custom-dropdown-menu">
         {menuItems}
       </Menu>
     );
@@ -496,7 +440,6 @@ const App = () => {
       <Select
         mode="tags"
         className="custom-select-with-scroll"
-        style={{ width: "340px" }}
         placeholder="Tags Mode"
         value={selectedValues}
         onSearch={setInputTag}

@@ -1,60 +1,170 @@
 .App {
-    margin: 25px;
+  margin: 25px;
+}
+
+.ant-select-item {
+  background-color: white !important;
+
+  &-option-state {
+    display: none !important;
   }
-  
-  .ant-select-item {
-    background-color: white !important;
-  
-    &-option-state {
+
+  &-option-selected {
+    background-color: transparent !important;
+    color: inherit;
+  }
+
+  &-option-active:not(&-option-selected) {
+    background-color: #1890ff;
+  }
+}
+
+.ant-select-selector {
+  .select-items-label {
+    display: block !important;
+    padding-right: 0px;
+
+    .anticon {
       display: none !important;
     }
-  
-    &-option-selected {
-      background-color: transparent !important;
-      color: inherit;
-    }
-  
-    &-option-active:not(&-option-selected) {
-      background-color: #1890ff;
+  }
+}
+
+.select-items-label {
+  /* padding-right: 20px; */
+  display: flex;
+  justify-content: space-between;
+}
+
+.ant-select-selection-item-content {
+  > .anticon {
+    &.anticon-edit {
+      display: none;
     }
   }
-  
-  .ant-select-selector {
-    .select-items-label {
-      display: block !important;
-      padding-right: 0px;
-  
-      .anticon {
-        display: none !important;
-      }
+}
+
+.icon-hover-box {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    border-color: #d9d9d9;
+    cursor: pointer;
+  }
+}
+
+.color-modal {
+  z-index: 1000;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  .tag-input-field {
+    margin-bottom: 10px;
+  }
+
+  .delete-tag-button {
+    width: 100%;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: rgb(235, 87, 87) !important;
+    border: 1px solid rgba(235, 87, 87, 0.5) !important;
+    background: rgba(235, 87, 87, 0.1) !important;
+  }
+
+  .colors-heading {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .color-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    // padding: 1px;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &.active {
+      background-color: #f0f0f0;
+    }
+    .ant-tag {
+      font-size: 14px;
     }
   }
-  
-  .select-items-label {
-    /* padding-right: 20px; */
+}
+
+.delete-confirmation-modal {
+  .modal-body {
+    text-align: center;
+    p {
+      // If you need to add specific styles to the paragraph
+      font-size: 15px;
+    }
+
+    .delete-button {
+      cursor: pointer;
+      color: rgb(235, 87, 87) !important;
+      border: 1px solid rgba(235, 87, 87, 0.5) !important;
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      background: rgba(235, 87, 87, 0.1);
+    }
+
+    .cancel-button {
+      width: 100%; // Full-width button
+      // Add any other specific styles for the cancel button here
+    }
+  }
+}
+
+.custom-dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+
+  .menu-item {
+    background-color: transparent !important;
+    color: inherit;
+    &.selected {
+      background-color: #e6f4ff !important;
+      color: white !important;
+    }
+  }
+
+  .menu-item-content {
     display: flex;
     justify-content: space-between;
-  }
-  
-  .ant-select-selection-item-content {
-    > .anticon {
-      &.anticon-edit {
-        display: none;
-      }
-    }
-  }
-  
-  .icon-hover-box {
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 5px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-  
-    &:hover {
-      border-color: #d9d9d9;
-      cursor: pointer;
+    width: 100%;
+  }
+
+  .custom-tag-container {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  .icon-hover-box {
+    cursor: pointer;
+    flex-shrink: 0;
+    transform: rotate(90deg);
+
+    .more-icon {
+      width: auto;
+      height: auto;
+      color: black;
     }
   }
-  
+}
+.custom-select-with-scroll{
+ width: 340px;
+}
